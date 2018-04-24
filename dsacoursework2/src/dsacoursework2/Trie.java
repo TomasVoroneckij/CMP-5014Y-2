@@ -25,32 +25,20 @@ public class Trie extends TrieNode {
         this.root = node;
     }
 
+    /**
+     * Method to add a key to the trie
+     *
+     * @param key
+     */
     public boolean add(String key) {
-//        TrieNode currentNode = root;
-//        for (int i = 0; i < key.length(); i++) {
-//            char current = key.charAt(i);
-//            //int charCode = getCharIndex(current);
-//            TrieNode child = currentNode.getNode(current);
-//            if(currentNode != null){
-//               child = currentNode.getNode(current);
-//            }
-//                if(child == null){
-//                    currentNode.setNode(current);
-//                  child = currentNode.getNode(current);
-//                }else{
-//                    currentNode = child;
-//                }
-//        }
-//           if(currentNode.isComplete()){
-//               return false;
-//           }else{
-//               currentNode.setComplete(true);
-//               return true;
-//           }
+        //set current node to root
         TrieNode currentNode = root;
+        //iterate through all the key 
         for (int i = 0; i < key.length(); i++) {
             char current = key.charAt(i);
+
             if (currentNode != null) {
+
                 TrieNode child = currentNode.getNode(current);
                 if (child == null) {
                     currentNode.setNode(current);
@@ -67,6 +55,11 @@ public class Trie extends TrieNode {
 
     }
 
+    /**
+     * Method to check if the word passed in the trie is a whole word
+     *
+     * @param key
+     */
     public boolean contains(String key) {
         TrieNode currentNode = root;
 
@@ -79,15 +72,12 @@ public class Trie extends TrieNode {
         return currentNode.isComplete();
     }
 
+    /**
+     * Method to output the string by breadth first search
+     *
+     * @param key
+     */
     public String outputBreadthFirstSearch() {
-//        String output = "";
-//        List<TrieNode> nodesList  = new ArrayList<>();
-//        nodesList.add(root);
-//        TrieNode currentNode = new TrieNode();
-//            currentNode = nodesList.get(0);
-//            for(int i=0;i<26;i++){
-//                TrieNode temp = currentNode;
-//            }
         //a string for the result
         String result = "";
         //initialiase a queue for the nodes
@@ -106,9 +96,14 @@ public class Trie extends TrieNode {
         return result.toLowerCase();
     }
 
+    /**
+     * Method to output the string by depth first search
+     *
+     * @param trienode
+     * @return result
+     */
     public String depthFirstSearch(TrieNode trienode) {
         String result = "";
-        Queue nodes = new LinkedList();
         for (TrieNode node : trienode.getOffspring()) {
             if (node != null) {
                 result += depthFirstSearch(node);
@@ -126,6 +121,11 @@ public class Trie extends TrieNode {
         return result;
     }
 
+    /**
+     * Method to return a trie rooted at the prefix
+     *
+     * @param prefix
+     */
     public Trie getSubTrie(String prefix) {
         TrieNode currentNode = root;
         Trie result = new Trie();
@@ -139,21 +139,6 @@ public class Trie extends TrieNode {
         }
         return result;
     }
-//    public List<String> getAllWords(){
-//        List<String> result = new ArrayList<String>();
-//        for(TrieNode temp : root.getOffspring()){
-//            if(null != temp){
-//                
-//            }
-//        }
-//    }
-//    private void getWordList(List<String> result, String word, TrieNode trienode) {
-//    if (trienode.word) {
-//      result.add(word);
-//    }
-//
-//    }
-//  }
 
     public List<String> getAllWords() {
         List<String> output = new LinkedList<>();
@@ -163,21 +148,20 @@ public class Trie extends TrieNode {
 
     private void getAllWords(String prefix, TrieNode trienode,
             List<String> nodes) {
+
         for (TrieNode temp : trienode.getOffspring()) {
+
             if (temp != null) {
                 String prefix2 = prefix + temp.getChar();
-                if (temp.isComplete()) {
-                    nodes.add(prefix2);
-                }
+
                 getAllWords(prefix2, temp, nodes);
             }
         }
+        if (trienode.isComplete()) {
+            nodes.add(prefix);
+        }
     }
 
-//    public String toString(){
-//        return this.depthFirstSearch(this.root);
-//    }
-//    
     public static void main(String[] args) {
         Trie test = new Trie();
         System.out.println(test.add("cheers"));

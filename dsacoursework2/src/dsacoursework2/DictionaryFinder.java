@@ -44,7 +44,6 @@ public class DictionaryFinder {
             str = str.toLowerCase();
             words.add(str);
         }
-        //System.out.println(words.toString());
         return words;
     }
 
