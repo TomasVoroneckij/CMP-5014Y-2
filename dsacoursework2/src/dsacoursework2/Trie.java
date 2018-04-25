@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Trie data structure
  */
 package dsacoursework2;
 
@@ -31,9 +29,7 @@ public class Trie extends TrieNode {
      * @param key
      */
     public boolean add(String key) {
-        //set current node to root
         TrieNode currentNode = root;
-        //iterate through all the key 
         for (int i = 0; i < key.length(); i++) {
             char current = key.charAt(i);
 

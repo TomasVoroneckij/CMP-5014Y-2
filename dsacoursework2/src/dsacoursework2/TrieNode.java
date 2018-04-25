@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ *TrieNode class and a root for Trie
  */
 package dsacoursework2;
 
@@ -88,7 +86,7 @@ public class TrieNode {
     }
 
     /**
-     * Accessor method to return the letter of a noda
+     * Accessor method to return the letter of a node
      *
      * @param c
      */
