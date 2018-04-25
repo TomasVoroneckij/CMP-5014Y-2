@@ -33,7 +33,8 @@ public class DictionaryFinder {
      *
      * @param f
      */
-    public static ArrayList<String> readWordsFromCSV(String file) throws FileNotFoundException {
+    public static ArrayList<String> readWordsFromCSV(String file)
+            throws FileNotFoundException {
         Scanner sc = new Scanner(new File(file));
         sc.useDelimiter(" |,");
         ArrayList<String> words = new ArrayList<>();
@@ -47,7 +48,13 @@ public class DictionaryFinder {
         return words;
     }
 
-    public static void saveCollectionToFile(Collection<?> c, String file) throws IOException {
+    /**
+     * Saves the file to a fileWriter
+     *
+     * @param c, file
+     */
+    public static void saveCollectionToFile(Collection<?> c, String file)
+            throws IOException {
         FileWriter fileWriter = new FileWriter(file);
         PrintWriter printWriter = new PrintWriter(fileWriter);
         for (Object w : c) {
@@ -56,6 +63,11 @@ public class DictionaryFinder {
         printWriter.close();
     }
 
+    /**
+     * Forms a dictionary of words
+     *
+     * @param words
+     */
     public void formDictionary(List<String> words) {
         for (String word : words) {
             if (!(this.treeMap.containsKey(word))) {
@@ -67,6 +79,11 @@ public class DictionaryFinder {
         }
     }
 
+    /**
+     * Saves the dictionary with a printwriter
+     *
+     * @param f
+     */
     public void saveToFile() throws IOException {
         StringBuilder sb = new StringBuilder();
         try (PrintWriter printWriter = new PrintWriter("output.csv")) {

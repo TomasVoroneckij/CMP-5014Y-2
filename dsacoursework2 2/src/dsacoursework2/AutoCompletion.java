@@ -20,7 +20,8 @@ import java.util.TreeMap;
  */
 public class AutoCompletion {
 
-    public static void main(String[] args) throws FileNotFoundException, IOException {
+    public static void main(String[] args) throws FileNotFoundException,
+            IOException {
         DictionaryFinder df = new DictionaryFinder();
         DictionaryFinder df1 = new DictionaryFinder();
         //printwriter to save the output to "lotrMatches.csv"
@@ -37,16 +38,17 @@ public class AutoCompletion {
         df1.formDictionary(LotrQueries);
         Trie wordstrie = new Trie();
         HashMap<String, Integer> words = new HashMap<String, Integer>();
-        NavigableMap<String, Integer> storeAuto = new TreeMap<String, Integer>();
-        //attemp to output only top 3-5 best words
-        int keyCount = 0;
+        NavigableMap<String, Integer> storeAuto
+                = new TreeMap<String, Integer>();
+        NavigableMap<String, Integer> storeAutoTemp
+                = new TreeMap<String, Integer>();
         //used to count frequency
         int count = 0;
         //iterate through all the words in ArrayList in from "lotr.csv"
         for (int i = 0; i < in.size(); i++) {
             //add those words to the trie
             wordstrie.add(in.get(i));
-            
+
         }
         //
         List<String> lotr = new ArrayList<>();
@@ -76,7 +78,7 @@ public class AutoCompletion {
             for (int j = 0; j < list.size(); j++) {
                 //adds the prefix to the other part of the word
                 auto = prefix.trim() + list.get(j).trim();
-                //iterate through all the words words entry set
+                //iterate through all the words from entry set
                 for (Map.Entry<String, Integer> entry : words.entrySet()) {
                     //if words that are in auto equal to the words in entry map
                     if (auto.equals(entry.getKey())) {
@@ -90,10 +92,36 @@ public class AutoCompletion {
             }
 
         }
+
+        int counter = 0;
+        int numberOfPrefixes = 2;
+        //iterate through all the words from storeAutp
+        for (Map.Entry<String, Integer> entry : storeAuto.entrySet()) {
+            //if words are equal to the first entry of StoreAuto
+            if (entry.equals(storeAuto.firstEntry())) {
+                //store them into storeAuto temp
+                storeAutoTemp.put(entry.getKey(), entry.getValue());
+            } //if prefixes are equal and count is less than 3 words
+            else if (storeAutoTemp.lastEntry().getKey().substring(0, 2).equals
+            (entry.getKey().substring(0, 2)) && counter < numberOfPrefixes) {
+                //store words into storeAuto temp
+                storeAutoTemp.put(entry.getKey(), entry.getValue());
+                //increase counter by 1
+                counter++;
+            } //if prefixes are not equal to each other
+            else if (!(storeAutoTemp.lastEntry().getKey().substring(0, 2).equals
+            (entry.getKey().substring(0, 2)))) {
+                //set counter to 0
+                counter = 0;
+                //store words into storeAuto temp
+                storeAutoTemp.put(entry.getKey(), entry.getValue());
+            }
+
+        }
         //create an empty string
         String key = "  ";
-        //iterate through all the words that are in the storeAuto map 
-        for (Map.Entry<String, Integer> entry : storeAuto.entrySet()) {
+        //iterate through all the words that are in the storeAutoTemp map 
+        for (Map.Entry<String, Integer> entry : storeAutoTemp.entrySet()) {
             //if the prefix of key is not equal to entry map prefix,which store
             //storeAuto words
             if (!(key.substring(0, 2).equals(entry.getKey().substring(0, 2)))) {
@@ -102,7 +130,7 @@ public class AutoCompletion {
                     //add the frequency to test arraylist
                     test.add(count);
 
-                }         
+                }
                 count = 0;
             }
             //get all the keys from entry map that store storeAuto words
@@ -112,8 +140,27 @@ public class AutoCompletion {
             //counts the frequency of each prefix 
             count += value;
             //if entry map equals last entry of th, add it
-            if (entry.equals(storeAuto.lastEntry())) {
+            if (entry.equals(storeAutoTemp.lastEntry())) {
                 test.add(count);
+            }
+
+        }
+        //attempt to sort
+        Map.Entry<String, Integer> previousEntry = null;
+        Map.Entry<String, Integer> tempEntry;
+        for (Map.Entry<String, Integer> entry : storeAutoTemp.entrySet()) {
+
+            if (!entry.equals(storeAutoTemp.firstEntry())) {
+                if (entry.getKey().substring(0, 2).equals(previousEntry.getKey()
+                        .substring(0, 2)) && entry.getValue() > 
+                        previousEntry.getValue()) {
+                    tempEntry = previousEntry;
+                    previousEntry = entry;
+                    entry = tempEntry;
+
+                }
+            } else {
+                previousEntry = entry;
             }
 
         }
@@ -123,17 +170,14 @@ public class AutoCompletion {
         double probability;
         //i is used to switch between prefixes
         int i = -1;
-        //iterate through all the words that are in the storeAuto map 
-        for (Map.Entry<String, Integer> entry : storeAuto.entrySet()) {
+        //iterate through all the words that are in the storeAutoTemp map 
+        for (Map.Entry<String, Integer> entry : storeAutoTemp.entrySet()) {
             //if the prefix of key is not equal to entry map prefix,which store
             //storeAuto words
             if (!(key.substring(0, 2).equals(entry.getKey().substring(0, 2)))) {
-            //attemp to use keycount to print up to 5 occurances and not all of
-            //them
-            keyCount++;
-            //used to separate words with different prefixes
+                //used to separate words with different prefixes
                 i++;
-            //System.out.println(keyCount);
+                //System.out.println(keyCount);
             }
             //frequency of each prefixes
             double total = test.get(i);

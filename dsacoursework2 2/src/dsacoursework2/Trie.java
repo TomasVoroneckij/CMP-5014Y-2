@@ -29,12 +29,14 @@ public class Trie extends TrieNode {
      * @param key
      */
     public boolean add(String key) {
+        //root trienode
         TrieNode currentNode = root;
+        //iterate through all the keys 
         for (int i = 0; i < key.length(); i++) {
+            //get their chars at i positions
             char current = key.charAt(i);
-
             if (currentNode != null) {
-
+                
                 TrieNode child = currentNode.getNode(current);
                 if (child == null) {
                     currentNode.setNode(current);
@@ -43,9 +45,11 @@ public class Trie extends TrieNode {
                 currentNode = child;
             }
         }
+        //if node is complete return false
         if (currentNode.isComplete()) {
             return false;
         }
+        //set node as complete and return true
         currentNode.setComplete(true);
         return true;
 
@@ -57,14 +61,18 @@ public class Trie extends TrieNode {
      * @param key
      */
     public boolean contains(String key) {
+        // set current node to root
         TrieNode currentNode = root;
-
+        //iterate through the key
         for (char c : key.toCharArray()) {
+            //if next node is not null return false
             if (currentNode.getNode(c) == null) {
                 return false;
             }
+            //else if it exists, assign currentNode to it
             currentNode = currentNode.getNode(c);
         }
+        //return whether the current Node is complete
         return currentNode.isComplete();
     }
 
@@ -80,15 +88,22 @@ public class Trie extends TrieNode {
         Queue nodes = new LinkedList();
         //add a root node
         nodes.add(root);
+        //iterate through nodes until they are empty
         while (!nodes.isEmpty()) {
+            //get the first node
             TrieNode temp = (TrieNode) nodes.poll();
+            //add all temp node letters to result
             result += temp.getChar();
+            //iterate through every node
             for (TrieNode node : temp.getOffspring()) {
+                //if node is not null
                 if (node != null) {
+                    //add a node to nodes linkedlist
                     nodes.add(node);
                 }
             }
         }
+        //return result
         return result.toLowerCase();
     }
 
@@ -99,19 +114,27 @@ public class Trie extends TrieNode {
      * @return result
      */
     public String depthFirstSearch(TrieNode trienode) {
+        //initialise an empty string
         String result = "";
+        //iterate through every node
         for (TrieNode node : trienode.getOffspring()) {
+            //if node is not null
             if (node != null) {
+                //add all the nodes to result from depthfirstseach
                 result += depthFirstSearch(node);
             }
         }
+        //append all letters of trienode to result
         result += trienode.getChar();
         return result;
     }
 
     public String outputDepthFirstSearch() {
+        //initialise an empty strin
         String result = "";
+        //if root is not empty
         if (root != null) {
+            //append result root from depthfirstsearch
             result += depthFirstSearch(root);
         }
         return result;
@@ -123,9 +146,12 @@ public class Trie extends TrieNode {
      * @param prefix
      */
     public Trie getSubTrie(String prefix) {
+        //set current node to root
         TrieNode currentNode = root;
         Trie result = new Trie();
+        //iterate through all the prefixes
         for (int i = 0; i < prefix.length(); i++) {
+            
             int index = (int) prefix.charAt(i) - 'a';
 
             if (currentNode.getNode(prefix.charAt(i)) != null) {
@@ -141,18 +167,24 @@ public class Trie extends TrieNode {
         getAllWords("\0", root, output);
         return output;
     }
-
+    /**
+     * Method to get All the words out of the prefix
+     *
+     * @param prefix, trienode, nodes
+     */
     private void getAllWords(String prefix, TrieNode trienode,
             List<String> nodes) {
-
+        //iterate through every trienode 
         for (TrieNode temp : trienode.getOffspring()) {
-
+            //if temp is not null
             if (temp != null) {
+                //word from prefix  and temp char
                 String prefix2 = prefix + temp.getChar();
 
                 getAllWords(prefix2, temp, nodes);
             }
         }
+       
         if (trienode.isComplete()) {
             nodes.add(prefix);
         }
